@@ -4,6 +4,7 @@ import 'package:ingenieria_economica/pages/complete_profile/complete_profile.dar
 import 'package:ingenieria_economica/pages/forgot_password/forgot_password.dart';
 import 'package:ingenieria_economica/pages/home_personal/home_personal.dart';
 import 'package:ingenieria_economica/pages/notebook/page_amortizacion.dart';
+import 'package:ingenieria_economica/pages/notebook/page_gradiente.dart';
 import 'package:ingenieria_economica/pages/notebook/page_interes_compuesto.dart';
 import 'package:ingenieria_economica/pages/notebook/page_interes_simple.dart';
 import 'package:ingenieria_economica/pages/profile/profile.dart';
@@ -26,4 +27,5 @@ final Map<String, WidgetBuilder> routes = {
   InteresSimple.routeName: (context) => InteresSimple(),
   InteresCompuesto.routeName: (context) => InteresCompuesto(),
   Amortizacion.routeName: (context) => Amortizacion(),
+  Gradiente.routeName: (context) => Gradiente(),
 };

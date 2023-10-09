@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../controller/controller_opciones_firebase.dart';
 import '../../../size_config.dart';
+import '../../notebook/page_gradiente.dart';
 
 class Banner4 extends StatelessWidget {
   const Banner4({
@@ -10,7 +11,9 @@ class Banner4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        Navigator.pushNamed(context, Gradiente.routeName);
+      },
       child: Container(
         width: double.infinity,
         margin: EdgeInsets.all(getProportionateScreenWidth(20)),
