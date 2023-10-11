@@ -169,6 +169,14 @@ class _GradienteState extends State<Gradiente> {
         _calcularPresenteInfinitoAritmetico();
       } else {
         _calcularPresenteAritmetico();
+        _calcularFuturoAritmetico();
+      }
+    } else if (selectedType == 'Geometrico') {
+      if (_cuotasController.text.isEmpty) {
+        _calcularPresenteInfinitoGeometrico();
+      } else {
+        _calcularPresenteGeometrico();
+        _calcularFuturoGeometrico();
       }
     }
   }
@@ -223,6 +231,80 @@ class _GradienteState extends State<Gradiente> {
       } else {
         valorPresente = valorPresenteNegativo;
       }
+      _valorPresenteController.text = valorPresente.toStringAsFixed(2);
+    }
+  }
+
+  void _calcularFuturoAritmetico() {
+    double ingresos = double.tryParse(_ingresosController.text) ?? 0;
+    double tasaNormal = double.tryParse(_tasaController.text) ?? 0;
+    double tasa = tasaNormal / 100;
+    double aumento = double.tryParse(_aumentoController.text) ?? 0;
+    double valorFuturo = double.tryParse(_valorFuturoController.text) ?? 0;
+    double cuotas = double.tryParse(_cuotasController.text) ?? 0;
+    double valorFuturoPositivo = 0.0;
+    double valorFuturoNegativo = 0.0;
+    if (_valorFuturoController.text.isEmpty) {
+      valorFuturoPositivo =
+          ingresos * ((((pow((1 + tasa), cuotas)) - 1) / (tasa))) +
+              ((aumento / tasa) *
+                  (((pow((1 + tasa), cuotas) - 1)) / (tasa) - (cuotas)));
+      valorFuturoNegativo =
+          ingresos * ((((pow((1 + tasa), cuotas)) - 1) / (tasa))) +
+              ((aumento / tasa) *
+                  (((pow((1 + tasa), cuotas) - 1)) / (tasa) - (cuotas)));
+      if (valorFuturoPositivo > 0) {
+        valorFuturo = valorFuturoPositivo;
+      } else {
+        valorFuturo = valorFuturoNegativo;
+      }
+      _valorFuturoController.text = valorFuturo.toStringAsFixed(2);
+    }
+  }
+
+  void _calcularPresenteGeometrico() {
+    double ingresos = double.tryParse(_ingresosController.text) ?? 0;
+    double tasaNormal = double.tryParse(_tasaController.text) ?? 0;
+    double tasa = tasaNormal / 100;
+    double aumentoNormal = double.tryParse(_aumentoController.text) ?? 0;
+    double aumento = aumentoNormal / 100;
+    double valorPresente = double.tryParse(_valorFuturoController.text) ?? 0;
+    double cuotas = double.tryParse(_cuotasController.text) ?? 0;
+    if (aumentoNormal == tasaNormal) {
+      valorPresente = ((cuotas * ingresos) / (1 + tasa));
+    } else {
+      valorPresente = ((ingresos) / (aumento - tasa)) *
+          (((pow((1 + aumento), cuotas)) / (pow((1 + tasa), cuotas))) - 1);
+    }
+    _valorPresenteController.text = valorPresente.toStringAsFixed(2);
+  }
+
+  void _calcularFuturoGeometrico() {
+    double ingresos = double.tryParse(_ingresosController.text) ?? 0;
+    double tasaNormal = double.tryParse(_tasaController.text) ?? 0;
+    double tasa = tasaNormal / 100;
+    double aumentoNormal = double.tryParse(_aumentoController.text) ?? 0;
+    double aumento = aumentoNormal / 100;
+    double valorFuturo = double.tryParse(_valorFuturoController.text) ?? 0;
+    double cuotas = double.tryParse(_cuotasController.text) ?? 0;
+    if (aumentoNormal == tasaNormal) {
+      valorFuturo = ((ingresos) / (pow((1 + tasa), (-cuotas + 1))));
+    } else {
+      valorFuturo = ((ingresos) / (aumento - tasa)) *
+          (((pow((1 + aumento), cuotas)) - (pow((1 + tasa), cuotas))));
+    }
+    _valorFuturoController.text = valorFuturo.toStringAsFixed(2);
+  }
+
+  void _calcularPresenteInfinitoGeometrico() {
+    double ingresos = double.tryParse(_ingresosController.text) ?? 0;
+    double tasaNormal = double.tryParse(_tasaController.text) ?? 0;
+    double tasa = tasaNormal / 100;
+    double aumentoNormal = double.tryParse(_aumentoController.text) ?? 0;
+    double aumento = aumentoNormal / 100;
+    double valorPresente = double.tryParse(_valorFuturoController.text) ?? 0;
+    if (aumentoNormal < tasaNormal) {
+      valorPresente = (ingresos) / (tasa - aumento);
       _valorPresenteController.text = valorPresente.toStringAsFixed(2);
     }
   }
