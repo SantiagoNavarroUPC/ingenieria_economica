@@ -24,6 +24,7 @@ class _GradienteState extends State<Gradiente> {
   TextEditingController _cuotapositivaController = TextEditingController();
   TextEditingController _cuotanegativaController = TextEditingController();
 
+  String selectedTypetasa = 'Pago por Periodo';
   String selectedRateType = 'Meses';
   String selectedType = 'Aritmetico';
   String selectedFuncion = 'Creciente';
@@ -48,6 +49,11 @@ class _GradienteState extends State<Gradiente> {
     'Cuatrimestres',
     'Semestres',
     'Años',
+  ];
+
+  List<String> tasaTypes = [
+    'Pago por Periodo',
+    'Nominal',
   ];
 
   @override
@@ -114,10 +120,42 @@ class _GradienteState extends State<Gradiente> {
                 decoration: InputDecoration(labelText: 'Aumento'),
               ),
               SizedBox(height: 10),
-              TextField(
-                controller: _tasaController,
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(labelText: 'Tasa de interés (%)'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    child: TextField(
+                      controller: _tasaController,
+                      keyboardType: TextInputType.number,
+                      decoration:
+                          InputDecoration(labelText: 'Tasa de interes %'),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Flexible(
+                    flex: 1,
+                    child: Row(
+                      children: [
+                        DropdownButton<String>(
+                          value: selectedTypetasa,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedTypetasa = newValue!;
+                            });
+                          },
+                          items: tasaTypes
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 10),
               Row(
@@ -287,6 +325,7 @@ class _GradienteState extends State<Gradiente> {
   }
 
   void _calcular() {
+    _calculartasa();
     if (selectedType == 'Aritmetico') {
       if (_cuotasController.text.isEmpty &&
           _valorPresenteController.text.isEmpty) {
@@ -309,11 +348,66 @@ class _GradienteState extends State<Gradiente> {
     }
   }
 
+  void _calculartasa() {
+    double tasa = double.tryParse(_tasaController.text) ?? 0;
+    tasa = tasa / 100;
+    if (selectedTypetasa == 'Nominal') {
+      if (selectedRateType == 'Dias') {
+        tasa = pow((1 + tasa), 1 / 30).toDouble() - 1;
+        tasa = tasa * 100;
+        _tasaController.text = tasa.toStringAsFixed(2);
+        setState(() {
+          selectedTypetasa = 'Pago por Periodo';
+        });
+      }
+      if (selectedRateType == 'Meses') {
+        tasa = pow((1 + tasa), 1 / 12).toDouble() - 1;
+        tasa = tasa * 100;
+        _tasaController.text = tasa.toStringAsFixed(2);
+        setState(() {
+          selectedTypetasa = 'Pago por Periodo';
+        });
+      }
+      if (selectedRateType == 'Trimestres') {
+        tasa = pow((1 + tasa), 1 / 4).toDouble() - 1;
+        tasa = tasa * 100;
+        _tasaController.text = tasa.toStringAsFixed(2);
+        setState(() {
+          selectedTypetasa = 'Pago por Periodo';
+        });
+      }
+      if (selectedRateType == 'Cuatrimestres') {
+        tasa = pow((1 + tasa), 1 / 3).toDouble() - 1;
+        tasa = tasa * 100;
+        _tasaController.text = tasa.toStringAsFixed(2);
+        setState(() {
+          selectedTypetasa = 'Pago por Periodo';
+        });
+      }
+      if (selectedRateType == 'Semestres') {
+        tasa = pow((1 + tasa), 1 / 2).toDouble() - 1;
+        tasa = tasa * 100;
+        _tasaController.text = tasa.toStringAsFixed(2);
+        setState(() {
+          selectedTypetasa = 'Pago por Periodo';
+        });
+      }
+      if (selectedRateType == 'Años') {
+        tasa = pow((1 + tasa), 1).toDouble() - 1;
+        tasa = tasa * 100;
+        _tasaController.text = tasa.toStringAsFixed(2);
+        setState(() {
+          selectedTypetasa = 'Pago por Periodo';
+        });
+      }
+    }
+  }
+
   void _calcularcuotax() {
     double ingresos = double.tryParse(_ingresosController.text) ?? 0;
     double aumento = double.tryParse(_aumentoController.text) ?? 0;
     double cuotax = double.tryParse(_cuotaxController.text) ?? 0.0;
-    if (typefuncion == 'Creciente') {
+    if (selectedFuncion == 'Creciente') {
       cuotax = ingresos + (cuotax - 1) * aumento;
       _cuotaxController.text = cuotax.toStringAsFixed(2);
     } else {
@@ -367,16 +461,18 @@ class _GradienteState extends State<Gradiente> {
               (((pow((1 + tasa), cuotas) - 1)) /
                       (tasa * pow((1 + tasa), cuotas)) -
                   (cuotas / pow((1 + tasa), cuotas))));
-      if (typefuncion == 'Creciente') {
+      if (selectedFuncion == 'Creciente') {
         valorPresente = valorPresentePositivo;
+        valorPresente = valorPresente.abs();
         _valorPresenteController.text = valorPresente.toStringAsFixed(2);
       } else {
         valorPresente = valorPresenteNegativo;
+        valorPresente = valorPresente.abs();
         _valorPresenteController.text = valorPresente.toStringAsFixed(2);
       }
     }
     if (_ingresosController.text.isEmpty) {
-      if (typefuncion == 'Creciente') {
+      if (selectedFuncion == 'Creciente') {
         ingresos = (valorPresente -
                 (aumento / tasa) *
                     (((1 - pow((1 + tasa), -cuotas)) / tasa) -
@@ -399,7 +495,7 @@ class _GradienteState extends State<Gradiente> {
           double.tryParse(_cuotapositivaController.text) ?? 0;
       double cuotanegativa =
           double.tryParse(_cuotanegativaController.text) ?? 0;
-      if (typefuncion == 'Creciente') {
+      if (selectedFuncion == 'Creciente') {
         valorPresentePositivo = ingresos *
                 ((((pow((1 + tasa), cuotapositiva)) - 1) /
                     (tasa * (pow((1 + tasa), cuotapositiva))))) +
@@ -446,7 +542,7 @@ class _GradienteState extends State<Gradiente> {
       }
     }
     if (_aumentoController.text.isEmpty) {
-      if (typefuncion == 'Creciente') {
+      if (selectedFuncion == 'Creciente') {
         aumento = ((valorPresente -
                     (ingresos * ((1 - pow(1 + tasa, -cuotas)) / tasa))) /
                 (((1 - pow(1 + tasa, -cuotas)) / (tasa)) -
@@ -467,7 +563,7 @@ class _GradienteState extends State<Gradiente> {
       double tasanegativa = double.tryParse(_cuotanegativaController.text) ?? 0;
       tasapositiva = tasapositiva / 100;
       tasanegativa = tasanegativa / 100;
-      if (typefuncion == 'Creciente') {
+      if (selectedFuncion == 'Creciente') {
         valorPresentePositivo = ingresos *
                 ((((pow((1 + tasapositiva), cuotas)) - 1) /
                     (tasapositiva * (pow((1 + tasapositiva), cuotas))))) +
@@ -524,6 +620,7 @@ class _GradienteState extends State<Gradiente> {
     double cuotas = double.tryParse(_cuotasController.text) ?? 0;
     double valorFuturoPositivo = 0.0;
     double valorFuturoNegativo = 0.0;
+
     if (_valorFuturoController.text.isEmpty) {
       valorFuturoPositivo =
           ingresos * ((((pow((1 + tasa), cuotas)) - 1) / (tasa))) +
@@ -533,12 +630,21 @@ class _GradienteState extends State<Gradiente> {
           ingresos * ((((pow((1 + tasa), cuotas)) - 1) / (tasa))) -
               ((aumento / tasa) *
                   (((pow((1 + tasa), cuotas) - 1)) / (tasa) - (cuotas)));
-      if (typefuncion == 'Creciente') {
+      if (selectedFuncion == 'Creciente') {
         valorFuturo = valorFuturoPositivo;
+        valorFuturo = valorFuturo.abs();
         _valorFuturoController.text = valorFuturo.toStringAsFixed(2);
       } else {
         valorFuturo = valorFuturoNegativo;
+        valorFuturo = valorFuturo.abs();
         _valorFuturoController.text = valorFuturo.toStringAsFixed(2);
+      }
+      if (_valorPresenteController.text.isEmpty) {
+        double valorPresente =
+            double.tryParse(_valorPresenteController.text) ?? 0;
+        valorPresente = valorFuturo / pow((1 + tasa), cuotas);
+        valorPresente = valorPresente.abs();
+        _valorPresenteController.text = valorPresente.toStringAsFixed(2);
       }
     }
   }
@@ -607,6 +713,12 @@ class _GradienteState extends State<Gradiente> {
     });
     setState(() {
       selectedType = 'Aritmetico';
+    });
+    setState(() {
+      selectedFuncion = 'Creciente';
+    });
+    setState(() {
+      selectedTypetasa = 'Pago por Periodo';
     });
     _ingresosController.clear();
     _aumentoController.clear();

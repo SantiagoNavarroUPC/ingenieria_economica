@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:ingenieria_economica/pages/components/default_button_secundary.dart';
 import '../../../constants.dart';
+import '../../../controller/controller_user_firebase.dart';
 import '../../../size_config.dart';
 import '../../components/default_button.dart';
 import '../../home_personal/home_personal.dart';
@@ -60,8 +62,12 @@ class _BodyState extends State<Body> {
                     DefaultButtonSecundary(
                       text: "Continuar",
                       press: () {
+                        String user = '1234@gmail.com';
+                        String pass = '12345678';
+                        ControlUserAuth controlua = Get.find();
+                        controlua.ingresarUser(user, pass);
                         Navigator.pushReplacementNamed(
-                            context, SignIn.routeName);
+                            context, HomePersonal.routeName);
                       },
                     ),
                     const Spacer(),
