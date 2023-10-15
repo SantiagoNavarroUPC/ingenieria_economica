@@ -61,7 +61,7 @@ class _BodyState extends State<Body> {
                       text: "Continuar",
                       press: () {
                         Navigator.pushReplacementNamed(
-                            context, HomePersonal.routeName);
+                            context, SignIn.routeName);
                       },
                     ),
                     const Spacer(),
