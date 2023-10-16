@@ -164,13 +164,13 @@ class _InteresSimpleState extends State<InteresSimple> {
             TextField(
               controller: _interesesController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Interes Compuesto'),
+              decoration: InputDecoration(labelText: 'Interes Simple'),
             ),
             SizedBox(height: 10),
             TextField(
               controller: _montoController,
               keyboardType: TextInputType.number,
-              decoration: InputDecoration(labelText: 'Monto Compuesto'),
+              decoration: InputDecoration(labelText: 'Monto Simple'),
             ),
             SizedBox(height: 8),
             Row(
@@ -224,8 +224,150 @@ class _InteresSimpleState extends State<InteresSimple> {
 
 /////-----Capitalizacion Simple-----/////////////
   void _calcularSinMonto() {
+    if (_aniosController.text.isEmpty &&
+        _mesesController.text.isEmpty &&
+        _diasController.text.isEmpty) {
+      _calcularTiempoSinMonto();
+    } else if (_capitalController.text.isEmpty) {
+      _calcularCapitalSinMonto();
+    } else if (_tasaController.text.isEmpty) {
+      _calcularTasaSinMonto();
+    }
     _calcularMonto();
     _calcularInteresesconMonto();
+  }
+
+  void _calcularTiempoSinMonto() {
+    double capital = double.tryParse(_capitalController.text) ?? 0;
+    double tasa = double.tryParse(_tasaController.text) ?? 0;
+    double intereses = double.tryParse(_interesesController.text) ?? 0;
+    if (selectedRateType == 'Diariamente') {
+      double tiempoEnDias =
+          (intereses) / (capital * (tasa / 100) * 30) * (365 / 30);
+      int anios = (tiempoEnDias / 365).floor();
+      int meses = ((tiempoEnDias - (anios * 365)) / 30).floor();
+      int dias = (tiempoEnDias - (anios * 365) - (meses * 30)).floor();
+
+      _aniosController.text = anios.toString();
+      _mesesController.text = meses.toString();
+      _diasController.text = dias.toString();
+    }
+    if (selectedRateType == 'Mensualmente') {
+      double tiempoEnDias = (intereses) / (capital * (tasa / 100) * 12 / 365);
+      int anios = (tiempoEnDias / 365).floor();
+      int meses = ((tiempoEnDias - (anios * 365)) / 30).floor();
+      int dias = (tiempoEnDias - (anios * 365) - (meses * 30)).floor();
+
+      _aniosController.text = anios.toString();
+      _mesesController.text = meses.toString();
+      _diasController.text = dias.toString();
+    }
+    if (selectedRateType == 'Trimestralmente') {
+      double tiempoEnDias = (intereses) / (capital * (tasa / 100) * 4 / 365);
+      int anios = (tiempoEnDias / 365).floor();
+      int meses = ((tiempoEnDias - (anios * 365)) / 30).floor();
+      int dias = (tiempoEnDias - (anios * 365) - (meses * 30)).floor();
+
+      _aniosController.text = anios.toString();
+      _mesesController.text = meses.toString();
+      _diasController.text = dias.toString();
+    }
+    if (selectedRateType == 'Cuatrimestralmente') {
+      double tiempoEnDias = (intereses) / (capital * (tasa / 100) * 3 / 365);
+      int anios = (tiempoEnDias / 365).floor();
+      int meses = ((tiempoEnDias - (anios * 365)) / 30).floor();
+      int dias = (tiempoEnDias - (anios * 365) - (meses * 30)).floor();
+
+      _aniosController.text = anios.toString();
+      _mesesController.text = meses.toString();
+      _diasController.text = dias.toString();
+    }
+    if (selectedRateType == 'Semestralmente') {
+      double tiempoEnDias = (intereses) / (capital * (tasa / 100) * 2 / 365);
+      int anios = (tiempoEnDias / 365).floor();
+      int meses = ((tiempoEnDias - (anios * 365)) / 30).floor();
+      int dias = (tiempoEnDias - (anios * 365) - (meses * 30)).floor();
+
+      _aniosController.text = anios.toString();
+      _mesesController.text = meses.toString();
+      _diasController.text = dias.toString();
+    }
+    if (selectedRateType == 'Anualmente') {
+      double tiempoEnDias = (intereses) / (capital * (tasa / 100) * 1 / 365);
+      int anios = (tiempoEnDias / 365).floor();
+      int meses = ((tiempoEnDias - (anios * 365)) / 30).floor();
+      int dias = (tiempoEnDias - (anios * 365) - (meses * 30)).floor();
+
+      _aniosController.text = anios.toString();
+      _mesesController.text = meses.toString();
+      _diasController.text = dias.toString();
+    }
+  }
+
+  void _calcularTasaSinMonto() {
+    double intereses = double.tryParse(_interesesController.text) ?? 0;
+    double capital = double.tryParse(_capitalController.text) ?? 0;
+    int anios = int.tryParse(_aniosController.text) ?? 0;
+    int meses = int.tryParse(_mesesController.text) ?? 0;
+    int dias = int.tryParse(_diasController.text) ?? 0;
+    int totalDias = (anios * 365) + (meses * 30) + dias;
+    if (selectedRateType == 'Diariamente') {
+      double tasa = intereses / (((capital)) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Mensualmente') {
+      double tasa = intereses / (((capital) * 12) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Trimestralmente') {
+      double tasa = intereses / (((capital) * 4) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Cuatrimestralmente') {
+      double tasa = intereses / (((capital / 100) * 3) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Semestralmente') {
+      double tasa = intereses / (((capital / 100) * 2) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Anualmente') {
+      double tasa = intereses / (((capital / 100) * 1) * (totalDias / 365));
+      _tasaController.text = tasa.toStringAsFixed(2);
+    }
+  }
+
+  void _calcularCapitalSinMonto() {
+    double intereses = double.tryParse(_interesesController.text) ?? 0;
+    double tasa = double.tryParse(_tasaController.text) ?? 0;
+    int anios = int.tryParse(_aniosController.text) ?? 0;
+    int meses = int.tryParse(_mesesController.text) ?? 0;
+    int dias = int.tryParse(_diasController.text) ?? 0;
+    int totalDias = (anios * 365) + (meses * 30) + dias;
+    if (selectedRateType == 'Diariamente') {
+      double capital = intereses / (((tasa / 100)) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Mensualmente') {
+      double capital = intereses / (((tasa / 100) * 12) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Trimestralmente') {
+      double capital = intereses / (((tasa / 100) * 4) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Cuatrimestralmente') {
+      double capital = intereses / (((tasa / 100) * 3) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Semestralmente') {
+      double capital = intereses / (((tasa / 100) * 2) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
+    if (selectedRateType == 'Anualmente') {
+      double capital = intereses / (((tasa / 100) * 1) * (totalDias / 365));
+      _capitalController.text = capital.toStringAsFixed(2);
+    }
   }
 
   void _calcularConMonto() {

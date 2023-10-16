@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:ingenieria_economica/pages/complete_profile/complete_profile.dart';
 import 'package:ingenieria_economica/pages/forgot_password/forgot_password.dart';
 import 'package:ingenieria_economica/pages/home_personal/home_personal.dart';
-import 'package:ingenieria_economica/pages/notebook/page_amortizacion.dart';
+import 'package:ingenieria_economica/pages/notebook/page_tir.dart';
 import 'package:ingenieria_economica/pages/notebook/page_gradiente.dart';
 import 'package:ingenieria_economica/pages/notebook/page_interes_compuesto.dart';
 import 'package:ingenieria_economica/pages/notebook/page_interes_simple.dart';

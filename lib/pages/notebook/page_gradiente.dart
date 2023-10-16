@@ -6,7 +6,7 @@ import 'dart:math';
 enum TiempoUnit { meses, anos }
 
 class Gradiente extends StatefulWidget {
-  static String routeName = "/interes_compuesto";
+  static String routeName = "/gradiente";
 
   @override
   _GradienteState createState() => _GradienteState();

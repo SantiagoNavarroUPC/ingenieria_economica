@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ingenieria_economica/pages/notebook/page_amortizacion.dart';
+import 'package:ingenieria_economica/pages/notebook/page_tir.dart';
 import '../../../controller/controller_opciones_firebase.dart';
 import '../../../size_config.dart';
 
