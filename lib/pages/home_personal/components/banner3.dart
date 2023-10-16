@@ -12,7 +12,7 @@ class Banner3 extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, Amortizacion.routeName);
+        Navigator.pushNamed(context, TasaInteresRetorno.routeName);
       },
       child: Container(
         width: double.infinity,

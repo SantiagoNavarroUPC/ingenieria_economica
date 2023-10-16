@@ -26,6 +26,6 @@ final Map<String, WidgetBuilder> routes = {
   Profile.routeName: (context) => const Profile(),
   InteresSimple.routeName: (context) => InteresSimple(),
   InteresCompuesto.routeName: (context) => InteresCompuesto(),
-  Amortizacion.routeName: (context) => Amortizacion(),
+  TasaInteresRetorno.routeName: (context) => TasaInteresRetorno(),
   Gradiente.routeName: (context) => Gradiente(),
 };

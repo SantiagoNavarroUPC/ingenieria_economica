@@ -726,6 +726,5 @@ class _GradienteState extends State<Gradiente> {
     _cuotasController.clear();
     _valorPresenteController.clear();
     _valorFuturoController.clear();
-    setState(() {});
   }
 }
